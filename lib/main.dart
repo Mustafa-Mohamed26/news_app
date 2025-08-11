@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       // Define the initial route of the app based on whether the user has seen the onboarding screen
       initialRoute: AppRoutes.homeRouteName,
       routes: {
-        AppRoutes.homeRouteName: (context) => const HomeScreen(),
+        AppRoutes.homeRouteName: (context) =>  HomeScreen(),
       },
     );
   }

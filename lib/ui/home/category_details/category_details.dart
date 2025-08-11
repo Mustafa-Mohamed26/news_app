@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/model/category.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/ui/home/category_details/sources/source_tab_widget.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class CategoryDetails extends StatefulWidget {
-  const CategoryDetails({super.key});
+  Category category;
+  CategoryDetails({super.key, required this.category});
 
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
@@ -17,7 +19,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     // snapshot => Represents the state of the Future that fetches data from the API
     // It can be in different states: waiting, active, done, or error.
     return FutureBuilder<SourceResponse?>(
-      future: ApiManager.getSources(),
+      future: ApiManager.getSources(widget.category.id),
       builder: (context, snapshot) {
         // loading
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -36,7 +38,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  ApiManager.getSources();
+                  ApiManager.getSources(widget.category.id);
                   setState(() {}); // Refresh the widget to try again
                 },
                 style: ElevatedButton.styleFrom(
@@ -62,7 +64,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  ApiManager.getSources();
+                  ApiManager.getSources(widget.category.id);
                   setState(() {}); // Refresh the widget to try again
                 },
                 style: ElevatedButton.styleFrom(

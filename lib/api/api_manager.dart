@@ -7,11 +7,12 @@ import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 
 class ApiManager {
-  static Future<SourceResponse?> getSources() async {
+  static Future<SourceResponse?> getSources(String categoryID) async {
     // authority => The domain name of the server
     // unencodedPath => The path to the resource on the server
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourceApi, {
       'apiKey': ApiConstants.apiKey,
+      'category': categoryID,
     });
     try {
       var response = await http.get(url);
@@ -29,10 +30,10 @@ class ApiManager {
       'sources': sourceId,
     });
     try {
-      var response = await http.get(url); 
-      var responseBody = response.body; 
-      var json = jsonDecode(responseBody); 
-      return NewsResponse.fromJson(json); 
+      var response = await http.get(url);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      return NewsResponse.fromJson(json);
     } catch (e) {
       throw Exception(e);
     }
