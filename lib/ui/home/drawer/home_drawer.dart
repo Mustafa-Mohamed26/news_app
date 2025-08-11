@@ -5,7 +5,8 @@ import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({super.key});
+  VoidCallback onDrawerItemClick;
+  HomeDrawer({super.key, required this.onDrawerItemClick});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,10 @@ class HomeDrawer extends StatelessWidget {
               color: AppColors.whiteColor,
               child: Text("News App", style: AppStyles.medium24Black),
             ),
-            DrawerItem(icon: Icons.home_outlined, text: "Go To Home"),
+            InkWell(
+              onTap: () {onDrawerItemClick();},
+              child: DrawerItem(icon: Icons.home_outlined, text: "Go To Home"),
+            ),
 
             Divider(
               color: AppColors.whiteColor,

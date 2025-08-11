@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/ui/home/category_fragment/widget/category_item.dart';
 
+typedef OnCategoryItemClick = void Function(Category);
 class CategoryFragment extends StatelessWidget {
   List<Category> categoriesList = [];
-  CategoryFragment({super.key});
+  OnCategoryItemClick onCategoryItemClick;
+  CategoryFragment({super.key, required this.onCategoryItemClick});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,14 @@ class CategoryFragment extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               itemBuilder: (context, index) {
-                return CategoryItem(
-                  category: categoriesList[index],
-                  index: index,
+                return InkWell(
+                  onTap: () {
+                    onCategoryItemClick(categoriesList[index]);
+                  },
+                  child: CategoryItem(
+                    category: categoriesList[index],
+                    index: index,
+                  ),
                 );
               },
               separatorBuilder: (context, index) {
