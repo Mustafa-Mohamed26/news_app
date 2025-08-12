@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppThemeProvider extends ChangeNotifier {
   // Default theme mode
   // You can change this to your preferred default theme mode
-  ThemeMode appTheme = ThemeMode.light;
+  ThemeMode appTheme = ThemeMode.dark;
 
   // Constructor to load the saved theme from preferences
   AppThemeProvider() {
