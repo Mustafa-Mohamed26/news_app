@@ -1,0 +1,16 @@
+{
+  "goToHome": "Go To Home",
+  "theme": "Theme",
+  "language": "Language",
+  "dark": "Dark",
+  "light": "Light",
+  "english": "English",
+  "arabic": "Arabic",
+
+  "greetingNews": "Good Morning\nHere is Some News For You",
+  "viewAll": "View All",
+  "home": "Home",
+  "noResources": "No Resources",
+  "noArticles": "No Articles Found",
+  "readFullArticle": "Read Full Article"
+}

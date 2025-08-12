@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/l10n/app_localizations.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/utils/app_colors.dart';
 
@@ -41,7 +42,7 @@ class CategoryItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'View All',
+                AppLocalizations.of(context)!.viewAll,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               CircleAvatar(
