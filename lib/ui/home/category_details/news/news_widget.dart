@@ -4,6 +4,7 @@ import 'package:news_app/l10n/app_localizations.dart';
 import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/providers/app_language_provider.dart';
+import 'package:news_app/ui/home/category_details/news/news_details_bottom_sheet.dart';
 import 'package:news_app/ui/home/category_details/news/news_item.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,24 @@ class _NewsWidgetState extends State<NewsWidget> {
         return ListView.builder(
           itemCount: articles.length,
           itemBuilder: (context, index) {
-            return NewsItem(news: articles[index]);
+            var article = articles[index];
+            return InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (context) {
+                    return NewsDetailsBottomSheet(article: article);
+                  },
+                );
+              },
+              child: NewsItem(news: article),
+            );
           },
         );
       },

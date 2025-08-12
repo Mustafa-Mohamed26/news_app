@@ -8,6 +8,7 @@ import 'package:news_app/utils/app_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     // Use MultiProvider to provide multiple ChangeNotifier providers to the widget tree
     // This allows different parts of the app to access shared data and state management
@@ -34,20 +35,21 @@ class MyApp extends StatelessWidget {
     // Access the AppThemeProvider to get the current theme mode
     // This is used to apply the correct theme to the MaterialApp
     var appThemeProvider = Provider.of<AppThemeProvider>(context);
-    
-   
+
     // Return a MaterialApp widget that serves as the root of the application
     // It provides localization support, routing, theming, and other app-wide configurations
     return MaterialApp(
+      // Use the generated AppLocalizations class to provide localized strings
+      localizationsDelegates: AppLocalizations
+          .localizationsDelegates, // Use the generated AppLocalizations class
+      supportedLocales: AppLocalizations
+          .supportedLocales, // List of supported locales for localization
+      locale: Locale(
+        appLanguageProvider.appLanguage,
+      ), // Set the current locale based on the appLanguageProvider
 
-       // Use the generated AppLocalizations class to provide localized strings
-      localizationsDelegates: AppLocalizations.localizationsDelegates, // Use the generated AppLocalizations class
-      supportedLocales: AppLocalizations.supportedLocales, // List of supported locales for localization
-      locale: Locale(appLanguageProvider.appLanguage), // Set the current locale based on the appLanguageProvider
-      
-
-      debugShowCheckedModeBanner: false, // Disable the debug banner in the top right corner of the app
-
+      debugShowCheckedModeBanner:
+          false, // Disable the debug banner in the top right corner of the app
       // Set the theme of the app based on the current theme mode from AppThemeProvider
       // This allows the app to switch between light and dark themes based on user preference
       theme: AppTheme.lightTheme,

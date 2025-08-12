@@ -169,6 +169,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Articles Found'**
   String get noArticles;
+
+  /// No description provided for @readFullArticle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Full Article'**
+  String get readFullArticle;
 }
 
 class _AppLocalizationsDelegate

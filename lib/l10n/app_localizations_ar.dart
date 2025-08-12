@@ -43,4 +43,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noArticles => 'لا توجد مقالات متاحة حاليا';
+
+  @override
+  String get readFullArticle => 'قراءة المقال الكامل';
 }
