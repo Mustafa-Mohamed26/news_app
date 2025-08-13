@@ -68,12 +68,13 @@ flutter run
 ## 🗂️ Folder Structure
 ```
 lib/
-├── main.dart               # Entry point
-├── config/                 # Keys & constants
-├── models/                 # Article & source models
-├── services/               # API calls
-├── screens/                # UI screens
-└── widgets/                # Reusable components
+├── api/            # API service calls
+├── l10n/           # Localization files
+├── model/          # Data models
+├── providers/      # State management providers
+├── ui/home/        # UI screens and widgets for home
+├── utils/          # Utility functions and constants
+└── main.dart       # App entry point
 ```
 
 ---
