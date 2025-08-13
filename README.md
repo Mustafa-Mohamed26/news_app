@@ -1,16 +1,101 @@
-# news_app
+# 📰 Flutter News App
 
-A new Flutter project.
+A clean and responsive **news application** built with **Flutter**, using the [NewsAPI.org](https://newsapi.org/) REST API to deliver real-time headlines and articles. Users can explore trending topics, search for specific news, and read stories from various categories through an intuitive interface.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
+- **Live Headlines** from [NewsAPI.org](https://newsapi.org/)
+- **Category Filters**: Technology, Sports, Health, Business, Entertainment, Science
+- **Search Articles** by keyword
+- **Responsive UI** for Android, iOS, and Web
+- **Pull-to-Refresh** for instant updates
+- **Dark & Light Modes**
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🛠️ Built With
+- **Flutter** – Cross-platform framework
+- **Dart** – App logic & UI
+- **HTTP Package** – API calls
+- **Provider** – State management
+- **Cached Network Image** – Efficient image loading and caching
+- **Google Fonts** – Custom typography
+- **Get Time Ago** – Friendly time formatting
+- **Shared Preferences** – Local storage
+- **URL Launcher** – Open external links
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 📦 Setup & Installation
+
+**1. Prerequisites**
+- Install [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- Android Studio or VS Code
+- API key from [NewsAPI.org](https://newsapi.org/register)
+
+**2. Clone the Repository**
+```bash
+git clone https://github.com/your-username/flutter-news-app.git
+cd flutter-news-app
+```
+
+**3. Install Dependencies**
+```bash
+flutter pub get
+```
+
+**4. Add Your API Key**
+Create `lib/config/api_keys.dart`:
+```dart
+const String newsApiKey = "YOUR_NEWSAPI_KEY";
+```
+Replace with your key from [NewsAPI.org](https://newsapi.org/).
+
+**5. Run the App**
+```bash
+flutter run
+```
+
+---
+
+## 📷 Screenshots
+| Home | Article | Search |
+
+
+---
+
+## 🗂️ Folder Structure
+```
+lib/
+├── main.dart               # Entry point
+├── config/                 # Keys & constants
+├── models/                 # Article & source models
+├── services/               # API calls
+├── screens/                # UI screens
+└── widgets/                # Reusable components
+```
+
+---
+
+## 🔑 API Reference
+Base URL:
+```
+https://newsapi.org/v2/
+```
+**Endpoints**
+- Top Headlines: `/top-headlines?country=us&apiKey=YOUR_API_KEY`
+- Search: `/everything?q=keyword&apiKey=YOUR_API_KEY`
+
+Docs: [https://newsapi.org/docs](https://newsapi.org/docs)
+
+---
+
+## 📜 License
+Licensed under the **MIT License**.
+
+---
+
+## 🙌 Acknowledgements
+- [NewsAPI.org](https://newsapi.org/) for free news data
+- Flutter team for the framework
