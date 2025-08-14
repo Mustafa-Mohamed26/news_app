@@ -46,4 +46,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get readFullArticle => 'قراءة المقال الكامل';
+
+  @override
+  String get search => 'بحث';
 }

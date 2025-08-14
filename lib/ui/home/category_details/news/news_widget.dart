@@ -24,8 +24,8 @@ class _NewsWidgetState extends State<NewsWidget> {
 
     return FutureBuilder<NewsResponse?>(
       future: ApiManager.getNewsBySourceId(
-        widget.source.id ?? "",
-        languageProvider.appLanguage,
+        sourceId: widget.source.id ?? "",
+        language: languageProvider.appLanguage,
       ),
       builder: (context, snapshot) {
         // loading
@@ -45,8 +45,8 @@ class _NewsWidgetState extends State<NewsWidget> {
               ElevatedButton(
                 onPressed: () {
                   ApiManager.getNewsBySourceId(
-                    widget.source.id ?? "",
-                    languageProvider.appLanguage,
+                    sourceId:  widget.source.id ?? "",
+                    language: languageProvider.appLanguage,
                   );
                   setState(() {}); // Refresh the widget to try again
                 },
@@ -70,8 +70,8 @@ class _NewsWidgetState extends State<NewsWidget> {
               ElevatedButton(
                 onPressed: () {
                   ApiManager.getNewsBySourceId(
-                    widget.source.id ?? "",
-                    languageProvider.appLanguage,
+                    sourceId:  widget.source.id ?? "",
+                    language: languageProvider.appLanguage,
                   );
                   setState(() {}); // Refresh the widget to try again
                 },
