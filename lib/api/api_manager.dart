@@ -7,13 +7,16 @@ import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 
 class ApiManager {
-  static Future<SourceResponse?> getSources(String categoryID, String language) async {
+  static Future<SourceResponse?> getSources(
+    String categoryID,
+    String language,
+  ) async {
     // authority => The domain name of the server
     // unencodedPath => The path to the resource on the server
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourceApi, {
       'apiKey': ApiConstants.apiKey,
       'category': categoryID,
-      'language': language
+      'language': language,
     });
     try {
       var response = await http.get(url);
@@ -25,11 +28,16 @@ class ApiManager {
     }
   }
 
-  static Future<NewsResponse?> getNewsBySourceId(String sourceId, String language) async {
+  static Future<NewsResponse?> getNewsBySourceId({
+    required String sourceId,
+    required String language,
+    String? query,
+  }) async {
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.newsApi, {
       'apiKey': ApiConstants.apiKey,
       'sources': sourceId,
-      'language': language
+      'language': language,
+      'q': query,
     });
     try {
       var response = await http.get(url);

@@ -24,6 +24,8 @@ class NewsDetailsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
@@ -40,11 +42,12 @@ class NewsDetailsBottomSheet extends StatelessWidget {
                   width: double.infinity,
                 ),
               ),
-            const SizedBox(height: 8),
+             SizedBox(height: height * 0.02),
             Text(
               article.description ?? '',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+            SizedBox(height: height * 0.02),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -66,6 +69,7 @@ class NewsDetailsBottomSheet extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: height * 0.02),
           ],
         ),
       ),

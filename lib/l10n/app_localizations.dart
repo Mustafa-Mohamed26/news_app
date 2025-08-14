@@ -175,6 +175,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Read Full Article'**
   String get readFullArticle;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
 }
 
 class _AppLocalizationsDelegate
