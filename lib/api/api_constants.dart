@@ -1,4 +1,4 @@
 class ApiConstants {
   static const String baseUrl = 'newsapi.org';
-  static const String apiKey = '7bbe21140aa543589f888b8686887352';
+  static const String apiKey = 'a093248636854e9d8e7cf73989c474e7';
 }
