@@ -31,19 +31,23 @@ class ApiManager {
   static Future<NewsResponse?> getNewsBySourceId({
     required String sourceId,
     required String language,
+    int page = 1,
+    int pageSize = 20,
     String? query,
   }) async {
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.newsApi, {
       'apiKey': ApiConstants.apiKey,
       'sources': sourceId,
       'language': language,
-      'q': query,
+      'page': page.toString(),
+      'pageSize': pageSize.toString(),
+      if (query != null && query.isNotEmpty) 'q': query,
     });
+
     try {
       var response = await http.get(url);
       var responseBody = response.body;
-      var json = jsonDecode(responseBody);
-      return NewsResponse.fromJson(json);
+      return NewsResponse.fromJson(jsonDecode(responseBody));
     } catch (e) {
       throw Exception(e);
     }
