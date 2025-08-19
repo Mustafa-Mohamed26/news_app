@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/l10n/app_localizations.dart';
 import 'package:news_app/providers/app_language_provider.dart';
 import 'package:news_app/providers/app_theme_provider.dart';
 import 'package:news_app/ui/home/home_screen.dart';
 import 'package:news_app/utils/app_routes.dart';
 import 'package:news_app/utils/app_theme.dart';
+import 'package:news_app/utils/my_bloc_observer.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  Bloc.observer = MyBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     // Use MultiProvider to provide multiple ChangeNotifier providers to the widget tree
