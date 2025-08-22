@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/di/di.dart';
 import 'package:news_app/l10n/app_localizations.dart';
 import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
@@ -125,7 +126,7 @@ class _NewsWidgetState extends State<NewsWidget> {
   //   setState(() => isLoading = false);
   // }
 
-  NewsViewModel viewModel = NewsViewModel();
+  NewsViewModel viewModel = NewsViewModel(newsRepository: injectNewsRepository());
 
   @override
   void initState() {

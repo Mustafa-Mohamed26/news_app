@@ -7,7 +7,7 @@ import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 
 class ApiManager {
-  static Future<SourceResponse?> getSources(
+   Future<SourceResponse?> getSources(
     String categoryID,
     String language,
   ) async {
@@ -28,7 +28,7 @@ class ApiManager {
     }
   }
 
-  static Future<NewsResponse?> getNewsBySourceId({
+   Future<NewsResponse?> getNewsBySourceId({
     required String sourceId,
     required String language,
     int page = 1,
