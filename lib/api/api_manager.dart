@@ -1,23 +1,25 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 import 'package:news_app/api/api_constants.dart';
 import 'package:news_app/api/end_points.dart';
 import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 
+@Singleton()
 class ApiManager {
-  // singleton is a design pattern that restricts the instantiation of a class to one single instance.
-  // This is useful when exactly one object is needed to coordinate actions across the system.
-  static ApiManager? _instant; // singleton object
+  // // singleton is a design pattern that restricts the instantiation of a class to one single instance.
+  // // This is useful when exactly one object is needed to coordinate actions across the system.
+  // static ApiManager? _instant; // singleton object
 
-  // private constructor
-  ApiManager._();
+  // // private constructor
+  // ApiManager._();
 
-  static ApiManager getInstance() {
-    _instant ??= ApiManager._();
-    return _instant!;
-  }
+  // static ApiManager getInstance() {
+  //   _instant ??= ApiManager._();
+  //   return _instant!;
+  // }
 
   Future<SourceResponse?> getSources(String categoryID, String language) async {
     // authority => The domain name of the server

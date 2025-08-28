@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/api/api_manager.dart';
 import 'package:news_app/di/di.dart';
+import 'package:news_app/di/di_injectable.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/providers/app_language_provider.dart';
@@ -20,7 +21,7 @@ class CategoryDetails extends StatefulWidget {
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
-  SourcesViewModel viewModel = SourcesViewModel(sourceRepository: injectSourceRepository());
+  SourcesViewModel viewModel = getIt<SourcesViewModel>(); // field injection
   
 
   @override

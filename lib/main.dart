@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:news_app/di/di_injectable.dart';
 import 'package:news_app/l10n/app_localizations.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/providers/app_language_provider.dart';
@@ -19,6 +20,7 @@ void main() async{
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(SourceResponseAdapter());
   Hive.registerAdapter(SourceAdapter());
+  configureDependencies();  
   runApp(
     // Use MultiProvider to provide multiple ChangeNotifier providers to the widget tree
     // This allows different parts of the app to access shared data and state management
