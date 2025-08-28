@@ -7,10 +7,19 @@ import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 
 class ApiManager {
-   Future<SourceResponse?> getSources(
-    String categoryID,
-    String language,
-  ) async {
+  // singleton is a design pattern that restricts the instantiation of a class to one single instance.
+  // This is useful when exactly one object is needed to coordinate actions across the system.
+  static ApiManager? _instant; // singleton object
+
+  // private constructor
+  ApiManager._();
+
+  static ApiManager getInstance() {
+    _instant ??= ApiManager._();
+    return _instant!;
+  }
+
+  Future<SourceResponse?> getSources(String categoryID, String language) async {
     // authority => The domain name of the server
     // unencodedPath => The path to the resource on the server
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourceApi, {
@@ -28,7 +37,7 @@ class ApiManager {
     }
   }
 
-   Future<NewsResponse?> getNewsBySourceId({
+  Future<NewsResponse?> getNewsBySourceId({
     required String sourceId,
     required String language,
     int page = 1,
