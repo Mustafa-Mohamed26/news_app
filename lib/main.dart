@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:news_app/l10n/app_localizations.dart';
+import 'package:news_app/model/source_response.dart';
 import 'package:news_app/providers/app_language_provider.dart';
 import 'package:news_app/providers/app_theme_provider.dart';
 import 'package:news_app/ui/home/home_screen.dart';
 import 'package:news_app/utils/app_routes.dart';
 import 'package:news_app/utils/app_theme.dart';
 import 'package:news_app/utils/my_bloc_observer.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
   Bloc.observer = MyBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(SourceResponseAdapter());
+  Hive.registerAdapter(SourceAdapter());
   runApp(
     // Use MultiProvider to provide multiple ChangeNotifier providers to the widget tree
     // This allows different parts of the app to access shared data and state management
