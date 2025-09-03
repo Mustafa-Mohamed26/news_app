@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/api/app_exception.dart';
+import 'package:news_app/api/dio_api_manager.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/providers/app_language_provider.dart';
@@ -23,10 +26,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     // snapshot => Represents the state of the Future that fetches data from the API
     // It can be in different states: waiting, active, done, or error.
     return FutureBuilder<SourceResponse?>(
-      future: ApiManager.getSources(
-        widget.category.id,
-        languageProvider.appLanguage,
-      ),
+      future: DioApiManager().getSources(widget.category.id),
       builder: (context, snapshot) {
         // loading
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -37,18 +37,25 @@ class _CategoryDetailsState extends State<CategoryDetails> {
 
         // error form client
         if (snapshot.hasError) {
+          String errorMessage;
+          if (snapshot.error is DioException &&
+              (snapshot.error as DioException).error is AppException) {
+            // object dioException => AppException
+            errorMessage =
+                ((snapshot.error as DioException).error as AppException)
+                    .message;
+          } else {
+            errorMessage = snapshot.error.toString();
+          }
           return Column(
             children: [
               Text(
-                'Something went wrong: ${snapshot.error}',
+                errorMessage,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               ElevatedButton(
                 onPressed: () {
-                  ApiManager.getSources(
-                    widget.category.id,
-                    languageProvider.appLanguage,
-                  );
+                  DioApiManager().getSources(widget.category.id);
                   setState(() {}); // Refresh the widget to try again
                 },
                 style: ElevatedButton.styleFrom(
@@ -61,40 +68,56 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               ),
             ],
           );
-        }
-
-        // Server response in case of success or error
-        // server error
-        if (snapshot.data?.status == 'error') {
-          return Column(
-            children: [
-              Text(
-                snapshot.data!.message!,
-                style: Theme.of(context).textTheme.labelMedium,
+        } else if (snapshot.hasData) {
+          var sourcesList = snapshot.data!.sources;
+          if (sourcesList == null || sourcesList.isEmpty) {
+            return Center(
+              child: Text(
+                'No Source Found',
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  ApiManager.getSources(
-                    widget.category.id,
-                    languageProvider.appLanguage,
-                  );
-                  setState(() {}); // Refresh the widget to try again
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.greyColor,
-                ),
-                child: Text(
-                  'Try Again',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
+            );
+          } else {
+            return SourceTabWidget(sourcesList: sourcesList);
+          }
+        } else {
+          return Center(
+            child: Text(
+              'Starting fetching data',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           );
         }
 
-        // success
-        var sourcesList = snapshot.data?.sources ?? [];
-        return SourceTabWidget(sourcesList: sourcesList);
+        // // Server response in case of success or error
+        // // server error
+        // if (snapshot.data?.status == 'error') {
+        //   return Column(
+        //     children: [
+        //       Text(
+        //         snapshot.data!.message!,
+        //         style: Theme.of(context).textTheme.labelMedium,
+        //       ),
+        //       ElevatedButton(
+        //         onPressed: () {
+        //           DioApiManager().getSources(widget.category.id);
+        //           setState(() {}); // Refresh the widget to try again
+        //         },
+        //         style: ElevatedButton.styleFrom(
+        //           backgroundColor: AppColors.greyColor,
+        //         ),
+        //         child: Text(
+        //           'Try Again',
+        //           style: Theme.of(context).textTheme.labelMedium,
+        //         ),
+        //       ),
+        //     ],
+        //   );
+        // }
+
+        // // success
+        // var sourcesList = snapshot.data?.sources ?? [];
+        // return SourceTabWidget(sourcesList: sourcesList);
       },
     );
   }

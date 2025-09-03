@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/api/dio_api_manager.dart';
 import 'package:news_app/l10n/app_localizations.dart';
 import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
@@ -82,11 +83,8 @@ class _NewsWidgetState extends State<NewsWidget> {
     );
 
     try {
-      final response = await ApiManager.getNewsBySourceId(
-        sourceId: widget.source.id ?? "",
-        language: languageProvider.appLanguage,
-        page: currentPage,
-        pageSize: 20, // Limit per page for pagination
+      final response = await DioApiManager().getNewsBySourceId(
+        widget.source.id ?? "",
       );
 
       // Handle API error response
