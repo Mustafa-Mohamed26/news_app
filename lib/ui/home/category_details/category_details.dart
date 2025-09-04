@@ -26,7 +26,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     // snapshot => Represents the state of the Future that fetches data from the API
     // It can be in different states: waiting, active, done, or error.
     return FutureBuilder<SourceResponse?>(
-      future: DioApiManager().getSources(widget.category.id),
+      future: DioApiManager.getInstance().getSources(widget.category.id),
       builder: (context, snapshot) {
         // loading
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -55,7 +55,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  DioApiManager().getSources(widget.category.id);
+                  DioApiManager.getInstance().getSources(widget.category.id);
                   setState(() {}); // Refresh the widget to try again
                 },
                 style: ElevatedButton.styleFrom(

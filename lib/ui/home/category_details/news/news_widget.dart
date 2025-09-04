@@ -83,7 +83,7 @@ class _NewsWidgetState extends State<NewsWidget> {
     );
 
     try {
-      final response = await DioApiManager().getNewsBySourceId(
+      final response = await DioApiManager.getInstance().getNewsBySourceId(
         widget.source.id ?? "",
       );
 

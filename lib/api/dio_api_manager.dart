@@ -15,7 +15,7 @@ class DioApiManager {
     ),
   );
 
-  DioApiManager() {
+  DioApiManager._() {
     dio.interceptors.add(DioInterceptors());
     dio.interceptors.add(
       PrettyDioLogger(
@@ -37,6 +37,12 @@ class DioApiManager {
         // },
       ),
     );
+  }
+
+  static DioApiManager? _dioApiManager;
+
+  static DioApiManager getInstance() {
+    return _dioApiManager ??= DioApiManager._();
   }
 
   Future<SourceResponse?> getSources(String categoryID) async {
