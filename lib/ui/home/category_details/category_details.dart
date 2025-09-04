@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/api/api_constants.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/api/retrofit_services.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/providers/app_language_provider.dart';
@@ -22,11 +25,10 @@ class _CategoryDetailsState extends State<CategoryDetails> {
 
     // snapshot => Represents the state of the Future that fetches data from the API
     // It can be in different states: waiting, active, done, or error.
-    return FutureBuilder<SourceResponse?>(
-      future: ApiManager.getSources(
-        widget.category.id,
-        languageProvider.appLanguage,
-      ),
+    return FutureBuilder(
+      future: RetrofitServices(
+        Dio(),
+      ).getSources(ApiConstants.apiKey, widget.category.id),
       builder: (context, snapshot) {
         // loading
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,10 +47,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  ApiManager.getSources(
-                    widget.category.id,
-                    languageProvider.appLanguage,
-                  );
+                  RetrofitServices(
+                    Dio(),
+                  ).getSources(ApiConstants.apiKey, widget.category.id);
                   setState(() {}); // Refresh the widget to try again
                 },
                 style: ElevatedButton.styleFrom(
@@ -65,32 +66,32 @@ class _CategoryDetailsState extends State<CategoryDetails> {
 
         // Server response in case of success or error
         // server error
-        if (snapshot.data?.status == 'error') {
-          return Column(
-            children: [
-              Text(
-                snapshot.data!.message!,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ApiManager.getSources(
-                    widget.category.id,
-                    languageProvider.appLanguage,
-                  );
-                  setState(() {}); // Refresh the widget to try again
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.greyColor,
-                ),
-                child: Text(
-                  'Try Again',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
-          );
-        }
+        // if (snapshot.data?.status == 'error') {
+        //   return Column(
+        //     children: [
+        //       Text(
+        //         snapshot.data!.message!,
+        //         style: Theme.of(context).textTheme.labelMedium,
+        //       ),
+        //       ElevatedButton(
+        //         onPressed: () {
+        //           ApiManager.getSources(
+        //             widget.category.id,
+        //             languageProvider.appLanguage,
+        //           );
+        //           setState(() {}); // Refresh the widget to try again
+        //         },
+        //         style: ElevatedButton.styleFrom(
+        //           backgroundColor: AppColors.greyColor,
+        //         ),
+        //         child: Text(
+        //           'Try Again',
+        //           style: Theme.of(context).textTheme.labelMedium,
+        //         ),
+        //       ),
+        //     ],
+        //   );
+        // }
 
         // success
         var sourcesList = snapshot.data?.sources ?? [];
