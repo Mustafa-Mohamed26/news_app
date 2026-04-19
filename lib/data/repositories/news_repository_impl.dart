@@ -119,4 +119,34 @@ class NewsRepositoryImpl implements NewsRepository {
       ? 'No internet connection and no cached data available.' 
       : 'Network error and no local data found.');
   }
+
+  @override
+  Future<List<SourceEntity>?> getSourcesFromCache(String categoryId, String language) async {
+    final localResponse = await localSourceDataSource.getSources(categoryId, language);
+    if (localResponse != null && localResponse.sources != null && localResponse.sources!.isNotEmpty) {
+      return localResponse.sources!.map((source) => source.toEntity()).toList();
+    }
+    return null;
+  }
+
+  @override
+  Future<List<ArticleEntity>?> getNewsFromCache({
+    required String sourceId,
+    required String language,
+    int page = 1,
+    int pageSize = 20,
+    String? query,
+  }) async {
+    final localResponse = await localArticlesDataSource.getNewsBySourceId(
+      sourceId: sourceId,
+      language: language,
+      page: page,
+      pageSize: pageSize,
+      query: query,
+    );
+    if (localResponse != null && localResponse.articles != null && localResponse.articles!.isNotEmpty) {
+      return localResponse.articles!.map((article) => article.toEntity()).toList();
+    }
+    return null;
+  }
 }

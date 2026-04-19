@@ -21,15 +21,35 @@ class NewsViewModel extends Bloc<NewsEvent, NewsState> {
 
   NewsViewModel({required this.getNewsUseCase}) : super(NewsInitial()) {
     on<LoadNewsEvent>((event, emit) async {
-      if (event.page == 1) {
+      final isInitialLoad = event.page == 1;
+
+      if (isInitialLoad) {
         currentPage = 1;
-        articlesList.clear();
         hasMore = true;
-        emit(NewsLoading());
+        
+        // 1. Try to fetch from Cache INSTANTLY for page 1
+        try {
+          final cachedArticles = await getNewsUseCase.repository.getNewsFromCache(
+            sourceId: event.sourceId,
+            language: event.language,
+            page: 1,
+            pageSize: event.pageSize,
+            query: event.query,
+          );
+          if (cachedArticles != null && cachedArticles.isNotEmpty) {
+            articlesList = List.from(cachedArticles);
+            emit(NewsSuccess(articlesList, hasMore));
+          } else {
+            emit(NewsLoading());
+          }
+        } catch (e) {
+          emit(NewsLoading());
+        }
       } else {
         emit(NewsSuccess(articlesList, hasMore, isFetchingMore: true));
       }
 
+      // 2. Fetch from Remote
       try {
         var articles = await getNewsUseCase.execute(
           sourceId: event.sourceId,
@@ -38,14 +58,21 @@ class NewsViewModel extends Bloc<NewsEvent, NewsState> {
           pageSize: event.pageSize,
           query: event.query,
         );
+        
+        if (isInitialLoad) {
+          articlesList = articles; // Overwrite cache with fresh data
+        } else {
+          articlesList.addAll(articles);
+        }
+        
         hasMore = articles.length == event.pageSize;
-        articlesList.addAll(articles);
         currentPage++;
         emit(NewsSuccess(articlesList, hasMore));
       } catch (e) {
-        if (event.page == 1) {
+        if (isInitialLoad && articlesList.isEmpty) {
           emit(NewsError(e.toString()));
         } else {
+          // If we had cached data or were fetching more, just stop the loading state
           emit(NewsSuccess(articlesList, hasMore, isFetchingMore: false));
         }
       }
