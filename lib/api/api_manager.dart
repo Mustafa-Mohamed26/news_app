@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_app/api/api_constants.dart';
 import 'package:news_app/api/end_points.dart';
-import 'package:news_app/model/news_response.dart';
-import 'package:news_app/model/source_response.dart';
+import 'package:news_app/api/model/news_response.dart';
+import 'package:news_app/api/model/source_response.dart';
 
 class ApiManager {
   static Future<SourceResponse?> getSources(

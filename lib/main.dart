@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/l10n/app_localizations.dart';
-import 'package:news_app/providers/app_language_provider.dart';
-import 'package:news_app/providers/app_theme_provider.dart';
-import 'package:news_app/ui/home/home_screen.dart';
-import 'package:news_app/utils/app_routes.dart';
-import 'package:news_app/utils/app_theme.dart';
+import 'package:news_app/core/l10n/app_localizations.dart';
+import 'package:news_app/core/providers/app_language_provider.dart';
+import 'package:news_app/core/providers/app_theme_provider.dart';
+import 'package:news_app/core/routes/app_route_generator.dart';
+import 'package:news_app/core/routes/app_routes.dart';
+import 'package:news_app/core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -56,9 +56,8 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeProvider.appTheme,
 
-      // Define the initial route of the app based on whether the user has seen the onboarding screen
       initialRoute: AppRoutes.homeRouteName,
-      routes: {AppRoutes.homeRouteName: (context) => HomeScreen()},
+      onGenerateRoute: AppRouteGenerator.generateRoute,
     );
   }
 }
