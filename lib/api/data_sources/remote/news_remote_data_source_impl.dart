@@ -1,21 +1,19 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 import 'package:news_app/api/api_constants.dart';
 import 'package:news_app/api/end_points.dart';
 import 'package:news_app/api/model/news_response.dart';
 import 'package:news_app/api/model/source_response.dart';
+import 'package:news_app/data/data_sources/news_remote_data_source.dart';
 
-class ApiManager {
-  static Future<SourceResponse?> getSources(
-    String categoryID,
-    String language,
-  ) async {
-    // authority => The domain name of the server
-    // unencodedPath => The path to the resource on the server
+@Injectable(as: NewsRemoteDataSource)
+class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
+  @override
+  Future<SourceResponse?> getSources(String categoryId, String language) async {
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourceApi, {
       'apiKey': ApiConstants.apiKey,
-      'category': categoryID,
+      'category': categoryId,
       'language': language,
     });
     try {
@@ -28,7 +26,8 @@ class ApiManager {
     }
   }
 
-  static Future<NewsResponse?> getNewsBySourceId({
+  @override
+  Future<NewsResponse?> getNewsBySourceId({
     required String sourceId,
     required String language,
     int page = 1,

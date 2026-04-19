@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/api/model/source_response.dart';
+import 'package:news_app/domain/entities/source_entity.dart';
 
 class SourceName extends StatelessWidget {
-  final Source sources;
+  final SourceEntity sources;
   final bool isSelected;
   const SourceName({
     super.key,
@@ -13,7 +13,7 @@ class SourceName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      sources.name ?? '',
+      sources.name,
       style: isSelected
           ? Theme.of(context).textTheme.labelLarge
           : Theme.of(context).textTheme.labelMedium,

@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:news_app/api/model/news_response.dart';
+import 'package:news_app/domain/entities/article_entity.dart';
 import 'package:news_app/core/theme/app_colors.dart';
 
 class NewsItem extends StatelessWidget {
-  final Articles news;
+  final ArticleEntity news;
   const NewsItem({super.key, required this.news});
 
   @override
@@ -30,7 +30,7 @@ class NewsItem extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: CachedNetworkImage(
-              imageUrl: news.urlToImage ?? '',
+              imageUrl: news.urlToImage,
               placeholder: (context, url) => Center(
                 child: CircularProgressIndicator(color: AppColors.greyColor),
               ),
@@ -38,20 +38,20 @@ class NewsItem extends StatelessWidget {
             ),
           ),
           SizedBox(height: height * 0.02),
-          Text(news.title ?? '', style: Theme.of(context).textTheme.labelLarge),
+          Text(news.title, style: Theme.of(context).textTheme.labelLarge),
           SizedBox(height: height * 0.01),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Text(
-                  news.author ?? '',
+                  news.author,
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
               Spacer(),
               Text(
-                GetTimeAgo.parse(DateTime.parse(news.publishedAt ?? '')),
+                GetTimeAgo.parse(DateTime.parse(news.publishedAt)),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],

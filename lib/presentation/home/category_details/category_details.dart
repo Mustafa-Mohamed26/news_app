@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/api/api_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/api/model/category.dart';
-import 'package:news_app/api/model/source_response.dart';
+import 'package:news_app/config/di/di.dart';
 import 'package:news_app/core/providers/app_language_provider.dart';
-import 'package:news_app/presentation/home/category_details/sources/source_tab_widget.dart';
 import 'package:news_app/core/theme/app_colors.dart';
+import 'package:news_app/presentation/bloc/source/source_view_model.dart';
+import 'package:news_app/presentation/bloc/source/source_event.dart';
+import 'package:news_app/presentation/bloc/source/source_state.dart';
+import 'package:news_app/presentation/home/category_details/sources/source_tab_widget.dart';
 import 'package:provider/provider.dart';
 
 class CategoryDetails extends StatefulWidget {
@@ -16,86 +19,63 @@ class CategoryDetails extends StatefulWidget {
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
+  late SourceViewModel _sourceViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _sourceViewModel = getIt<SourceViewModel>();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var languageProvider = Provider.of<AppLanguageProvider>(context, listen: false);
+    _sourceViewModel.add(LoadSourcesEvent(
+      categoryId: widget.category.id,
+      language: languageProvider.appLanguage,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _sourceViewModel.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var languageProvider = Provider.of<AppLanguageProvider>(context);
-
-    // snapshot => Represents the state of the Future that fetches data from the API
-    // It can be in different states: waiting, active, done, or error.
-    return FutureBuilder<SourceResponse?>(
-      future: ApiManager.getSources(
-        widget.category.id,
-        languageProvider.appLanguage,
+    return BlocProvider.value(
+      value: _sourceViewModel,
+      child: BlocBuilder<SourceViewModel, SourceState>(
+        builder: (context, state) {
+          if (state is SourceLoading || state is SourceInitial) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.greyColor));
+          } else if (state is SourceError) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Something went wrong: ${state.message}',
+                  style: Theme.of(context).textTheme.labelMedium,
+                  textAlign: TextAlign.center,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    var languageProvider = Provider.of<AppLanguageProvider>(context, listen: false);
+                    _sourceViewModel.add(LoadSourcesEvent(categoryId: widget.category.id, language: languageProvider.appLanguage));
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.greyColor),
+                  child: Text('Try Again', style: Theme.of(context).textTheme.labelMedium),
+                ),
+              ],
+            );
+          } else if (state is SourceSuccess) {
+            return SourceTabWidget(sourcesList: state.sources);
+          }
+          return const SizedBox.shrink();
+        },
       ),
-      builder: (context, snapshot) {
-        // loading
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.greyColor),
-          );
-        }
-
-        // error form client
-        if (snapshot.hasError) {
-          return Column(
-            children: [
-              Text(
-                'Something went wrong: ${snapshot.error}',
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ApiManager.getSources(
-                    widget.category.id,
-                    languageProvider.appLanguage,
-                  );
-                  setState(() {}); // Refresh the widget to try again
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.greyColor,
-                ),
-                child: Text(
-                  'Try Again',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
-          );
-        }
-
-        // Server response in case of success or error
-        // server error
-        if (snapshot.data?.status == 'error') {
-          return Column(
-            children: [
-              Text(
-                snapshot.data!.message!,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ApiManager.getSources(
-                    widget.category.id,
-                    languageProvider.appLanguage,
-                  );
-                  setState(() {}); // Refresh the widget to try again
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.greyColor,
-                ),
-                child: Text(
-                  'Try Again',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
-          );
-        }
-
-        // success
-        var sourcesList = snapshot.data?.sources ?? [];
-        return SourceTabWidget(sourcesList: sourcesList);
-      },
     );
   }
 }

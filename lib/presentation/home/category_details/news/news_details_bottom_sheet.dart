@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/l10n/app_localizations.dart';
-import 'package:news_app/api/model/news_response.dart';
+import 'package:news_app/domain/entities/article_entity.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailsBottomSheet extends StatelessWidget {
-  final Articles article;
+  final ArticleEntity article;
   const NewsDetailsBottomSheet({super.key, required this.article});
 
   Future<void> _launchURL(String url) async {
@@ -32,18 +32,18 @@ class NewsDetailsBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (article.urlToImage != null)
+            if (article.urlToImage.isNotEmpty)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  article.urlToImage!,
+                  article.urlToImage,
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
               ),
              SizedBox(height: height * 0.02),
             Text(
-              article.description ?? '',
+              article.description,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(height: height * 0.02),
@@ -58,8 +58,8 @@ class NewsDetailsBottomSheet extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  if (article.url != null) {
-                    _launchURL(article.url!);
+                  if (article.url.isNotEmpty) {
+                    _launchURL(article.url);
                   }
                 },
                 child: Text(

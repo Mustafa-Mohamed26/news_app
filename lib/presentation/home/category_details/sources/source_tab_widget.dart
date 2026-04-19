@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:news_app/core/l10n/app_localizations.dart';
-import 'package:news_app/api/model/source_response.dart';
+import 'package:news_app/domain/entities/source_entity.dart';
 import 'package:news_app/presentation/home/category_details/news/news_widget.dart';
 import 'package:news_app/presentation/home/category_details/sources/source_name.dart';
 import 'package:news_app/core/theme/app_colors.dart';
 
 class SourceTabWidget extends StatefulWidget {
-  List<Source> sourcesList;
+  List<SourceEntity> sourcesList;
 
   SourceTabWidget({super.key, required this.sourcesList});
 
