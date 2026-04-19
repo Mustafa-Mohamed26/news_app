@@ -19,7 +19,7 @@ class SourceRemoteDataSourceImpl implements SourceDataSource {
       'language': language,
     });
     try {
-      var response = await http.get(url);
+      var response = await http.get(url).timeout(const Duration(seconds: 10));
       var responseBody = response.body;
       var json = jsonDecode(responseBody);
       return SourceResponse.fromJson(json);

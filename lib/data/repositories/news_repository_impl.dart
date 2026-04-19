@@ -31,38 +31,34 @@ class NewsRepositoryImpl implements NewsRepository {
   @override
   Future<List<SourceEntity>> getSources(String categoryId, String language) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
+    final bool isOffline = connectivityResult.contains(ConnectivityResult.none);
     
-    // Step 1: If explicitly offline, immediately fallback to local storage
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      var localResponse = await localSourceDataSource.getSources(categoryId, language);
-      if (localResponse == null || localResponse.sources == null || localResponse.sources!.isEmpty) {
-        throw Exception('No internet connection and no cached data available.');
+    // Attempt Remote if not explicitly offline
+    if (!isOffline) {
+      try {
+        var response = await remoteSourceDataSource.getSources(categoryId, language);
+        if (response != null && response.status != 'error') {
+          // Success: Cache it and return
+          await localSourceDataSource.cacheSources(categoryId, language, response);
+          var sourcesList = response.sources ?? [];
+          return sourcesList.map((source) => source.toEntity()).toList();
+        }
+      } catch (e) {
+        // Log the error and fall through to local fallback
+        print('Remote fetch failed, falling back to local: $e');
       }
+    }
+
+    // Local Fallback (triggered by explicit offline OR remote failure)
+    var localResponse = await localSourceDataSource.getSources(categoryId, language);
+    if (localResponse != null && localResponse.sources != null && localResponse.sources!.isNotEmpty) {
       return localResponse.sources!.map((source) => source.toEntity()).toList();
     }
 
-    try {
-      // Step 2: Try fetching from the remote API
-      var response = await remoteSourceDataSource.getSources(categoryId, language);
-      if (response?.status == 'error') {
-        throw Exception(response?.message ?? 'Failed to fetch sources');
-      }
-      
-      // Step 3: Cache the successful remote response for future offline use
-      if (response != null) {
-        await localSourceDataSource.cacheSources(categoryId, language, response);
-      }
-
-      var sourcesList = response?.sources ?? [];
-      return sourcesList.map((source) => source.toEntity()).toList();
-    } catch (e) {
-      // Step 4: If the API call fails (e.g., timeout or server error), try local fallback
-      var localResponse = await localSourceDataSource.getSources(categoryId, language);
-      if (localResponse == null || localResponse.sources == null || localResponse.sources!.isEmpty) {
-        throw Exception(e.toString());
-      }
-      return localResponse.sources!.map((source) => source.toEntity()).toList();
-    }
+    // Final Failure Case: Both remote and local failed
+    throw Exception(isOffline 
+      ? 'No internet connection and no cached data available.' 
+      : 'Network error and no local data found.');
   }
 
   @override
@@ -74,43 +70,53 @@ class NewsRepositoryImpl implements NewsRepository {
     String? query,
   }) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
+    final bool isOffline = connectivityResult.contains(ConnectivityResult.none);
 
-    // Step 1: Explicit offline check
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      var localResponse = await localArticlesDataSource.getNewsBySourceId(sourceId: sourceId, language: language, page: page, pageSize: pageSize, query: query);
-      if (localResponse == null || localResponse.articles == null || localResponse.articles!.isEmpty) {
-        throw Exception('No internet connection and no cached data available.');
+    // Attempt Remote if not explicitly offline
+    if (!isOffline) {
+      try {
+        var response = await remoteArticlesDataSource.getNewsBySourceId(
+          sourceId: sourceId,
+          language: language,
+          page: page,
+          pageSize: pageSize,
+          query: query,
+        );
+        if (response != null && response.status != 'error') {
+          // Success: Cache it and return
+          await localArticlesDataSource.cacheNews(
+            sourceId: sourceId,
+            language: language,
+            page: page,
+            pageSize: pageSize,
+            query: query,
+            response: response,
+          );
+          var articlesList = response.articles ?? [];
+          return articlesList.map((article) => article.toEntity()).toList();
+        }
+      } catch (e) {
+        // Log the error and fall through to local fallback
+        print('Remote fetch failed, falling back to local: $e');
       }
+    }
+
+    // Local Fallback (triggered by explicit offline OR remote failure)
+    var localResponse = await localArticlesDataSource.getNewsBySourceId(
+      sourceId: sourceId,
+      language: language,
+      page: page,
+      pageSize: pageSize,
+      query: query,
+    );
+    
+    if (localResponse != null && localResponse.articles != null && localResponse.articles!.isNotEmpty) {
       return localResponse.articles!.map((article) => article.toEntity()).toList();
     }
 
-    try {
-      // Step 2: Fetch from remote
-      var response = await remoteArticlesDataSource.getNewsBySourceId(
-        sourceId: sourceId,
-        language: language,
-        page: page,
-        pageSize: pageSize,
-        query: query,
-      );
-      if (response?.status == 'error') {
-        throw Exception(response?.message ?? 'Failed to fetch news');
-      }
-
-      // Step 3: Automatic caching on success
-      if (response != null) {
-        await localArticlesDataSource.cacheNews(sourceId: sourceId, language: language, page: page, pageSize: pageSize, query: query, response: response);
-      }
-      
-      var articlesList = response?.articles ?? [];
-      return articlesList.map((article) => article.toEntity()).toList();
-    } catch (e) {
-      // Step 4: Robust fallback on any endpoint error
-       var localResponse = await localArticlesDataSource.getNewsBySourceId(sourceId: sourceId, language: language, page: page, pageSize: pageSize, query: query);
-      if (localResponse == null || localResponse.articles == null || localResponse.articles!.isEmpty) {
-        throw Exception(e.toString());
-      }
-      return localResponse.articles!.map((article) => article.toEntity()).toList();
-    }
+    // Final Failure Case
+    throw Exception(isOffline 
+      ? 'No internet connection and no cached data available.' 
+      : 'Network error and no local data found.');
   }
 }

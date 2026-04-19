@@ -29,7 +29,7 @@ class ArticlesRemoteDataSourceImpl implements ArticlesDataSource {
     });
 
     try {
-      var response = await http.get(url);
+      var response = await http.get(url).timeout(const Duration(seconds: 10));
       var responseBody = response.body;
       return NewsResponse.fromJson(jsonDecode(responseBody));
     } catch (e) {
