@@ -5,8 +5,8 @@ import 'package:news_app/model/news_response.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class NewsItem extends StatelessWidget {
-  Articles news;
-  NewsItem({super.key, required this.news});
+  final Articles news;
+  const NewsItem({super.key, required this.news});
 
   @override
   Widget build(BuildContext context) {

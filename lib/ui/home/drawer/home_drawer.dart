@@ -11,8 +11,8 @@ import 'package:news_app/utils/app_styles.dart';
 import 'package:provider/provider.dart';
 
 class HomeDrawer extends StatefulWidget {
-  VoidCallback onDrawerItemClick;
-  HomeDrawer({super.key, required this.onDrawerItemClick});
+  final VoidCallback onDrawerItemClick;
+  const HomeDrawer({super.key, required this.onDrawerItemClick});
 
   @override
   State<HomeDrawer> createState() => _HomeDrawerState();

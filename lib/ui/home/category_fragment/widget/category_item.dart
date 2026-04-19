@@ -4,9 +4,9 @@ import 'package:news_app/model/category.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class CategoryItem extends StatelessWidget {
-  Category category;
-  int index;
-  CategoryItem({super.key, required this.category, required this.index});
+  final Category category;
+  final int index;
+  const CategoryItem({super.key, required this.category, required this.index});
 
   @override
   Widget build(BuildContext context) {

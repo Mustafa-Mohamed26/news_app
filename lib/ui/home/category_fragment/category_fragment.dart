@@ -7,9 +7,8 @@ import 'package:provider/provider.dart';
 
 typedef OnCategoryItemClick = void Function(Category);
 class CategoryFragment extends StatelessWidget {
-  List<Category> categoriesList = [];
-  OnCategoryItemClick onCategoryItemClick;
-  CategoryFragment({super.key, required this.onCategoryItemClick});
+  final OnCategoryItemClick onCategoryItemClick;
+  const CategoryFragment({super.key, required this.onCategoryItemClick});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class CategoryFragment extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
         var themeProvider = Provider.of<AppThemeProvider>(context);
 
-    categoriesList = Category.getCategoriesList(themeProvider.isDarkMode());
+    List<Category> categoriesList = Category.getCategoriesList(themeProvider.isDarkMode());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
       child: Column(

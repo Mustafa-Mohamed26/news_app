@@ -3,9 +3,9 @@ import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 
 class DrawerItem extends StatelessWidget {
-  IconData icon;
-  String text;
-  DrawerItem({super.key, required this.icon, required this.text});
+  final IconData icon;
+  final String text;
+  const DrawerItem({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {

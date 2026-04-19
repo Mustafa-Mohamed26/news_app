@@ -56,7 +56,6 @@ class _LanguageBottomSheetState extends State<LanguageBottomSheet> {
           SizedBox(height: height * 0.02),
           InkWell(
             onTap: () {
-              //TODO: change language to arabic
               languageProvider.changeLanguage('ar');
               setState(() {});
             },

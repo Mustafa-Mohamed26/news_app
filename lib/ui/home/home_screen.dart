@@ -5,7 +5,6 @@ import 'package:news_app/ui/home/category_details/category_details.dart';
 import 'package:news_app/ui/home/category_fragment/category_fragment.dart';
 import 'package:news_app/ui/home/drawer/home_drawer.dart';
 import 'package:news_app/ui/home/search/all_articles_widget.dart';
-import 'package:news_app/utils/app_colors.dart'; // Example: widget for showing all articles
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

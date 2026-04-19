@@ -3,8 +3,8 @@ import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 
 class AppConfigBottomSheet extends StatelessWidget {
-  String text;
-  AppConfigBottomSheet({super.key, required this.text});
+  final String text;
+  const AppConfigBottomSheet({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

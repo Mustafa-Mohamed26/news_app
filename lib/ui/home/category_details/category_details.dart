@@ -8,8 +8,8 @@ import 'package:news_app/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class CategoryDetails extends StatefulWidget {
-  Category category;
-  CategoryDetails({super.key, required this.category});
+  final Category category;
+  const CategoryDetails({super.key, required this.category});
 
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();

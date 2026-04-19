@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.6
   provider: ^6.1.5
-  google_fonts: ^6.3.0
-  http: ^1.4.0
+  google_fonts: ^8.0.2
+  http: ^1.6.0
   cached_network_image: ^3.4.1
   get_time_ago: ^2.3.2
   shared_preferences: ^2.5.3
