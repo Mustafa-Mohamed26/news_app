@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:news_app/api/model/news_response.dart';
+import 'package:news_app/api/model/source_response.dart';
 import 'package:news_app/core/l10n/app_localizations.dart';
 import 'package:news_app/core/providers/app_language_provider.dart';
 import 'package:news_app/core/providers/app_theme_provider.dart';
@@ -11,8 +12,14 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final directory = await getApplicationDocumentsDirectory();
-  Hive.init(directory.path);
+  await Hive.initFlutter();
+  
+  // Register Adapters
+  Hive.registerAdapter(SourceResponseAdapter());
+  Hive.registerAdapter(SourceAdapter());
+  Hive.registerAdapter(NewsResponseAdapter());
+  Hive.registerAdapter(ArticlesAdapter());
+
   await Hive.openBox('news_cache');
 
   runApp(

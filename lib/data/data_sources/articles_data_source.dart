@@ -1,8 +1,6 @@
-import 'package:news_app/api/model/source_response.dart';
 import 'package:news_app/api/model/news_response.dart';
 
-abstract class NewsDataSource {
-  Future<SourceResponse?> getSources(String categoryId, String language);
+abstract class ArticlesDataSource {
   Future<NewsResponse?> getNewsBySourceId({
     required String sourceId,
     required String language,
@@ -11,7 +9,6 @@ abstract class NewsDataSource {
     String? query,
   });
 
-  Future<void> cacheSources(String categoryId, String language, SourceResponse response);
   Future<void> cacheNews({
     required String sourceId,
     required String language,
