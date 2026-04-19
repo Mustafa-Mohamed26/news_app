@@ -5,11 +5,18 @@ import 'package:news_app/domain/use_cases/get_news_use_case.dart';
 import 'news_event.dart';
 import 'news_state.dart';
 
+/// ViewModel (BLoC) responsible for managing the state of news articles.
+/// 
+/// It captures [LoadNewsEvent]s from the UI and coordinates with the 
+/// [GetNewsUseCase] to retrieve data from the repository layers.
 @injectable
 class NewsViewModel extends Bloc<NewsEvent, NewsState> {
   final GetNewsUseCase getNewsUseCase;
-  int currentPage = 1;
+  
+  // Track pagination and list state internally for easy UI rendering
   List<ArticleEntity> articlesList = [];
+  int currentPage = 1;
+  static const int pageSize = 20;
   bool hasMore = true;
 
   NewsViewModel({required this.getNewsUseCase}) : super(NewsInitial()) {
@@ -24,7 +31,7 @@ class NewsViewModel extends Bloc<NewsEvent, NewsState> {
       }
 
       try {
-        var articles = await getNewsUseCase.invoke(
+        var articles = await getNewsUseCase.execute(
           sourceId: event.sourceId,
           language: event.language,
           page: event.page,

@@ -51,7 +51,7 @@ class NewsItem extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                GetTimeAgo.parse(DateTime.parse(news.publishedAt)),
+                _formatDate(news.publishedAt),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
@@ -59,5 +59,14 @@ class NewsItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatDate(String dateStr) {
+    try {
+      final DateTime dateTime = DateTime.parse(dateStr);
+      return GetTimeAgo.parse(dateTime);
+    } catch (e) {
+      return dateStr; // Fallback to raw string if parsing fails
+    }
   }
 }

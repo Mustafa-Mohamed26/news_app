@@ -6,6 +6,8 @@ import 'package:news_app/api/end_points.dart';
 import 'package:news_app/api/model/source_response.dart';
 import 'package:news_app/data/data_sources/source_data_source.dart';
 
+/// Implementation of [SourceDataSource] for fetching categories and 
+/// sources from the NewsAPI web service.
 @Named('remote')
 @Injectable(as: SourceDataSource)
 class SourceRemoteDataSourceImpl implements SourceDataSource {

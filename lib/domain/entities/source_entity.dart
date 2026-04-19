@@ -1,3 +1,4 @@
+/// Represents a news source (e.g., BBC News, CNN) in the domain layer.
 class SourceEntity {
   final String id;
   final String name;

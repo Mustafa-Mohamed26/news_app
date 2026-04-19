@@ -6,6 +6,9 @@ import 'package:news_app/presentation/home/category_fragment/category_fragment.d
 import 'package:news_app/presentation/home/drawer/home_drawer.dart';
 import 'package:news_app/presentation/home/search/all_articles_widget.dart';
 
+/// The main entry point of the app UI. 
+/// It manages the side drawer, searches articles, and toggles between 
+/// the Category list and the Category details screens.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

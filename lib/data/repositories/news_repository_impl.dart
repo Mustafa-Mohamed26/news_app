@@ -7,6 +7,13 @@ import 'package:news_app/domain/entities/article_entity.dart';
 import 'package:news_app/domain/entities/source_entity.dart';
 import 'package:news_app/domain/repositories/news_repository.dart';
 
+/// Implementation of [NewsRepository] that coordinates data flow between
+/// remote and local data sources.
+///
+/// It follows an **Offline-First** strategy:
+/// 1. Check internet connectivity using [Connectivity].
+/// 2. If online: Fetch from remote source and automatically cache results locally.
+/// 3. If offline or remote fetch fails: Serve data from the local Hive cache.
 @Injectable(as: NewsRepository)
 class NewsRepositoryImpl implements NewsRepository {
   final SourceDataSource remoteSourceDataSource;
@@ -25,6 +32,7 @@ class NewsRepositoryImpl implements NewsRepository {
   Future<List<SourceEntity>> getSources(String categoryId, String language) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     
+    // Step 1: If explicitly offline, immediately fallback to local storage
     if (connectivityResult.contains(ConnectivityResult.none)) {
       var localResponse = await localSourceDataSource.getSources(categoryId, language);
       if (localResponse == null || localResponse.sources == null || localResponse.sources!.isEmpty) {
@@ -34,11 +42,13 @@ class NewsRepositoryImpl implements NewsRepository {
     }
 
     try {
+      // Step 2: Try fetching from the remote API
       var response = await remoteSourceDataSource.getSources(categoryId, language);
       if (response?.status == 'error') {
         throw Exception(response?.message ?? 'Failed to fetch sources');
       }
       
+      // Step 3: Cache the successful remote response for future offline use
       if (response != null) {
         await localSourceDataSource.cacheSources(categoryId, language, response);
       }
@@ -46,6 +56,7 @@ class NewsRepositoryImpl implements NewsRepository {
       var sourcesList = response?.sources ?? [];
       return sourcesList.map((source) => source.toEntity()).toList();
     } catch (e) {
+      // Step 4: If the API call fails (e.g., timeout or server error), try local fallback
       var localResponse = await localSourceDataSource.getSources(categoryId, language);
       if (localResponse == null || localResponse.sources == null || localResponse.sources!.isEmpty) {
         throw Exception(e.toString());
@@ -64,6 +75,7 @@ class NewsRepositoryImpl implements NewsRepository {
   }) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
 
+    // Step 1: Explicit offline check
     if (connectivityResult.contains(ConnectivityResult.none)) {
       var localResponse = await localArticlesDataSource.getNewsBySourceId(sourceId: sourceId, language: language, page: page, pageSize: pageSize, query: query);
       if (localResponse == null || localResponse.articles == null || localResponse.articles!.isEmpty) {
@@ -73,6 +85,7 @@ class NewsRepositoryImpl implements NewsRepository {
     }
 
     try {
+      // Step 2: Fetch from remote
       var response = await remoteArticlesDataSource.getNewsBySourceId(
         sourceId: sourceId,
         language: language,
@@ -84,6 +97,7 @@ class NewsRepositoryImpl implements NewsRepository {
         throw Exception(response?.message ?? 'Failed to fetch news');
       }
 
+      // Step 3: Automatic caching on success
       if (response != null) {
         await localArticlesDataSource.cacheNews(sourceId: sourceId, language: language, page: page, pageSize: pageSize, query: query, response: response);
       }
@@ -91,6 +105,7 @@ class NewsRepositoryImpl implements NewsRepository {
       var articlesList = response?.articles ?? [];
       return articlesList.map((article) => article.toEntity()).toList();
     } catch (e) {
+      // Step 4: Robust fallback on any endpoint error
        var localResponse = await localArticlesDataSource.getNewsBySourceId(sourceId: sourceId, language: language, page: page, pageSize: pageSize, query: query);
       if (localResponse == null || localResponse.articles == null || localResponse.articles!.isEmpty) {
         throw Exception(e.toString());

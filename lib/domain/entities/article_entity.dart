@@ -1,3 +1,5 @@
+/// Represents a news article in the domain layer, containing all 
+/// necessary metadata for UI display.
 class ArticleEntity {
   final String author;
   final String title;

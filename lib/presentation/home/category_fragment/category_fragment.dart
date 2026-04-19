@@ -5,6 +5,8 @@ import 'package:news_app/core/providers/app_theme_provider.dart';
 import 'package:news_app/presentation/home/category_fragment/widget/category_item.dart';
 import 'package:provider/provider.dart';
 
+/// A UI component that displays a selectable list of news categories 
+/// (e.g., Sports, Business, Technology) to the user.
 typedef OnCategoryItemClick = void Function(Category);
 class CategoryFragment extends StatelessWidget {
   final OnCategoryItemClick onCategoryItemClick;

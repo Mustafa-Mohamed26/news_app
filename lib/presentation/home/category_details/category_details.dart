@@ -10,6 +10,9 @@ import 'package:news_app/presentation/bloc/source/source_state.dart';
 import 'package:news_app/presentation/home/category_details/sources/source_tab_widget.dart';
 import 'package:provider/provider.dart';
 
+/// Detailed screen for a specific category. 
+/// It initializes the [SourceViewModel] to fetch the tabs/sources 
+/// available for the chosen category.
 class CategoryDetails extends StatefulWidget {
   final Category category;
   const CategoryDetails({super.key, required this.category});

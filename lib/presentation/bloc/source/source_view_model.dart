@@ -12,7 +12,7 @@ class SourceViewModel extends Bloc<SourceEvent, SourceState> {
     on<LoadSourcesEvent>((event, emit) async {
       emit(SourceLoading());
       try {
-        var sources = await getSourcesUseCase.invoke(event.categoryId, event.language);
+        var sources = await getSourcesUseCase.execute(event.categoryId, event.language);
         emit(SourceSuccess(sources));
       } catch (e) {
         emit(SourceError(e.toString()));

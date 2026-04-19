@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:news_app/core/routes/app_routes.dart';
 import 'package:news_app/presentation/home/home_screen.dart';
 
+/// Centralized Route Management for the application. 
+/// It maps route names (defined in [AppRoutes]) to their respective 
+/// Widget components with optional parameter passing.
 class AppRouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
