@@ -1,102 +1,80 @@
-# 📰 Flutter News App
+# News App | Flutter Clean Architecture
 
-A clean and responsive **news application** built with **Flutter**, using the [NewsAPI.org](https://newsapi.org/) REST API to deliver real-time headlines and articles. Users can explore trending topics, search for specific news, and read stories from various categories through an intuitive interface.
+![News App Banner](assets/media/banner.png)
 
----
+[![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+[![Clean Architecture](https://img.shields.io/badge/Pattern-Clean%20Architecture-green?style=for-the-badge)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
-## ✨ Features
-- **Live Headlines** from [NewsAPI.org](https://newsapi.org/)
-- **Category Filters**: Technology, Sports, Health, Business, Entertainment, Science
-- **Search Articles** by keyword
-- **Responsive UI** for Android, iOS, and Web
-- **Pull-to-Refresh** for instant updates
-- **Dark & Light Modes**
+**News App** is a high-performance, professional mobile application designed to keep you updated with the latest headlines from around the world. Built with **Flutter** and adhering to strict **Clean Architecture** principles, it provides a seamless experience even in offline environments.
 
----
+## 🚀 Key Features
 
-## 🛠️ Built With
-- **Flutter** – Cross-platform framework
-- **Dart** – App logic & UI
-- **HTTP Package** – API calls
-- **Provider** – State management
-- **Cached Network Image** – Efficient image loading and caching
-- **Google Fonts** – Custom typography
-- **Get Time Ago** – Friendly time formatting
-- **Shared Preferences** – Local storage
-- **URL Launcher** – Open external links
+- **Offline-First Synchronization**: Powered by **Hive CE (Community Edition)**. The app caches every article and source locally, allowing for instant access without an internet connection.
+- **Domain-Driven Design**: Complete separation of Concerns between UI, Business Logic, and Data sourcing.
+- **MVVM + BLoC State Management**: Predictable, event-driven transitions and reactive UI updates.
+- **Dependency Injection**: Highly modular and testable code using **Injectable** and **GetIt**.
+- **Paginated Scrolling**: Optimized data fetching for large news feeds to minimize bandwidth usage.
+- **Global Search**: Filter articles by keywords across multiple sources.
+- **Adaptive Theming**: Full support for both **Dark** and **Light** modes with a vibrant, modern UI.
+- **Localization**: Ready for global audiences with built-in internationalization support.
 
----
+## 🛠️ Technology Stack
 
-## 📦 Setup & Installation
+| Layer | Tools & Libraries |
+| :--- | :--- |
+| **UI / Framework** | Flutter (Dart) |
+| **State Management** | Flutter BLoC (MVVM) |
+| **Local Database** | Hive CE (Community Edition) |
+| **Dependency Injection** | Injectable, GetIt |
+| **Networking** | http |
+| **Connectivity** | Connectivity Plus |
+| **Assets/Images** | Cached Network Image |
 
-**1. Prerequisites**
-- Install [Flutter SDK](https://flutter.dev/docs/get-started/install)
-- Android Studio or VS Code
-- API key from [NewsAPI.org](https://newsapi.org/register)
+## 🏗️ Architecture Overview
 
-**2. Clone the Repository**
-```bash
-git clone https://github.com/your-username/flutter-news-app.git
-cd flutter-news-app
+The project follows a modular **Clean Architecture** structure:
+
+```mermaid
+graph TD
+    UI[Presentation Layer - BLoC/UI] --> Domain[Domain Layer - Use Cases/Entities]
+    Domain --> Data[Data Layer - Repositories/Data Sources]
+    Data --> Remote[Remote Data Source - NewsAPI]
+    Data --> Local[Local Data Source - Hive CE]
 ```
 
-**3. Install Dependencies**
-```bash
-flutter pub get
-```
+- **Domain Layer**: Contains the core business logic (Use Cases) and data definitions (Entities). It is independent of any third-party framework.
+- **Data Layer**: Responsible for retrieving data from the network or local database and mapping it to domain-friendly formats.
+- **Presentation Layer**: Manages the UI and user interactions using the BLoC pattern to separate the visual components from the logic.
 
-**4. Add Your API Key**
-Create `lib/config/api_keys.dart`:
-```dart
-const String newsApiKey = "YOUR_NEWSAPI_KEY";
-```
-Replace with your key from [NewsAPI.org](https://newsapi.org/).
+## 📸 Screenshots
 
-**5. Run the App**
-```bash
-flutter run
-```
+| Categories | News List | Article Details |
+| :---: | :---: | :---: |
+| ![Categories](assets/general.png) | ![News List](assets/busniess.png) | ![Details](assets/technology.png) |
+*(Demo images from assets folder)*
 
----
+## ⚙️ Installation & Setup
 
-## 📷 Screenshots
-| Home | Article | Search |
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Mustafa-Mohamed26/news_app.git
+   ```
 
+2. **Install dependencies**:
+   ```bash
+   flutter pub get
+   ```
 
----
+3. **Generate code (Injectable & Hive Adapters)**:
+   ```bash
+   dart run build_runner build -d
+   ```
 
-## 🗂️ Folder Structure
-```
-lib/
-├── api/            # API service calls
-├── l10n/           # Localization files
-├── model/          # Data models
-├── providers/      # State management providers
-├── ui/home/        # UI screens and widgets for home
-├── utils/          # Utility functions and constants
-└── main.dart       # App entry point
-```
+4. **Run the app**:
+   ```bash
+   flutter run
+   ```
 
 ---
-
-## 🔑 API Reference
-Base URL:
-```
-https://newsapi.org/v2/
-```
-**Endpoints**
-- Top Headlines: `/top-headlines?country=us&apiKey=YOUR_API_KEY`
-- Search: `/everything?q=keyword&apiKey=YOUR_API_KEY`
-
-Docs: [https://newsapi.org/docs](https://newsapi.org/docs)
-
----
-
-## 📜 License
-Licensed under the **MIT License**.
-
----
-
-## 🙌 Acknowledgements
-- [NewsAPI.org](https://newsapi.org/) for free news data
-- Flutter team for the framework
+*Developed by Mustafa Mohamed*
