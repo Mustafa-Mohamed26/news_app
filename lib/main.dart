@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:news_app/core/l10n/app_localizations.dart';
 import 'package:news_app/core/providers/app_language_provider.dart';
 import 'package:news_app/core/providers/app_theme_provider.dart';
@@ -7,8 +9,12 @@ import 'package:news_app/core/routes/app_routes.dart';
 import 'package:news_app/core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  await Hive.openBox('news_cache');
+
   runApp(
     // Use MultiProvider to provide multiple ChangeNotifier providers to the widget tree
     // This allows different parts of the app to access shared data and state management

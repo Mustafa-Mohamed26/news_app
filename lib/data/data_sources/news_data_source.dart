@@ -1,7 +1,7 @@
 import 'package:news_app/api/model/source_response.dart';
 import 'package:news_app/api/model/news_response.dart';
 
-abstract class NewsRemoteDataSource {
+abstract class NewsDataSource {
   Future<SourceResponse?> getSources(String categoryId, String language);
   Future<NewsResponse?> getNewsBySourceId({
     required String sourceId,
@@ -9,5 +9,15 @@ abstract class NewsRemoteDataSource {
     int page = 1,
     int pageSize = 20,
     String? query,
+  });
+
+  Future<void> cacheSources(String categoryId, String language, SourceResponse response);
+  Future<void> cacheNews({
+    required String sourceId,
+    required String language,
+    required int page,
+    required int pageSize,
+    String? query,
+    required NewsResponse response,
   });
 }

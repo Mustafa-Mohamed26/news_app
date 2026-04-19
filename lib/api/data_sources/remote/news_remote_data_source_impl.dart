@@ -5,10 +5,11 @@ import 'package:news_app/api/api_constants.dart';
 import 'package:news_app/api/end_points.dart';
 import 'package:news_app/api/model/news_response.dart';
 import 'package:news_app/api/model/source_response.dart';
-import 'package:news_app/data/data_sources/news_remote_data_source.dart';
+import 'package:news_app/data/data_sources/news_data_source.dart';
 
-@Injectable(as: NewsRemoteDataSource)
-class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
+@Named('remote')
+@Injectable(as: NewsDataSource)
+class NewsRemoteDataSourceImpl implements NewsDataSource {
   @override
   Future<SourceResponse?> getSources(String categoryId, String language) async {
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourceApi, {
@@ -51,4 +52,17 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<void> cacheSources(String categoryId, String language, SourceResponse response) async {}
+
+  @override
+  Future<void> cacheNews({
+    required String sourceId,
+    required String language,
+    required int page,
+    required int pageSize,
+    String? query,
+    required NewsResponse response,
+  }) async {}
 }

@@ -14,7 +14,8 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../api/data_sources/remote/news_remote_data_source_impl.dart'
     as _i166;
-import '../../data/data_sources/news_remote_data_source.dart' as _i163;
+import '../../api/data_sources/local/news_local_data_source_impl.dart' as _i61;
+import '../../data/data_sources/news_data_source.dart' as _i1023;
 import '../../data/repositories/news_repository_impl.dart' as _i213;
 import '../../domain/repositories/news_repository.dart' as _i88;
 import '../../domain/use_cases/get_news_use_case.dart' as _i899;
@@ -29,11 +30,19 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    gh.factory<_i163.NewsRemoteDataSource>(
+    gh.factory<_i1023.NewsDataSource>(
+      () => _i61.NewsLocalDataSourceImpl(),
+      instanceName: 'local',
+    );
+    gh.factory<_i1023.NewsDataSource>(
       () => _i166.NewsRemoteDataSourceImpl(),
+      instanceName: 'remote',
     );
     gh.factory<_i88.NewsRepository>(
-      () => _i213.NewsRepositoryImpl(gh<_i163.NewsRemoteDataSource>()),
+      () => _i213.NewsRepositoryImpl(
+        gh<_i1023.NewsDataSource>(instanceName: 'remote'),
+        gh<_i1023.NewsDataSource>(instanceName: 'local'),
+      ),
     );
     gh.factory<_i899.GetNewsUseCase>(
       () => _i899.GetNewsUseCase(repository: gh<_i88.NewsRepository>()),

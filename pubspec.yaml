@@ -49,6 +49,9 @@ dependencies:
   flutter_bloc: ^9.1.1
   injectable: ^2.7.1+4
   get_it: ^9.2.1
+  connectivity_plus: ^6.1.5
+  hive: ^2.2.3
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
